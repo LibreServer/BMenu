@@ -187,7 +187,7 @@ public class MenuItemBuilder implements Comparable<MenuItemBuilder> {
         }
         if (itemFlags.contains(ItemFlag.HIDE_ATTRIBUTES) && Version.is1_20_5orNewer()){
             // https://github.com/PaperMC/Paper/issues/10655
-            im.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier("123", 1, AttributeModifier.Operation.ADD_NUMBER));
+            im.addAttributeModifier(Attribute.ARMOR, new AttributeModifier("123", 1, AttributeModifier.Operation.ADD_NUMBER));
         }
 
         result.setItemMeta(im);

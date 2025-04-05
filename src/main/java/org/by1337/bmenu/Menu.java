@@ -1,5 +1,6 @@
 package org.by1337.bmenu;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -49,7 +50,7 @@ public abstract class Menu extends Placeholder implements InventoryHolder {
     protected final Map<String, String> args;
     @Nullable
     protected final Menu previousMenu;
-    protected BukkitTask ticker;
+    protected ScheduledTask ticker;
     protected Animator animator;
     protected @Nullable MenuItem lastClickedItem;
     protected long lastClickTime;
@@ -115,9 +116,9 @@ public abstract class Menu extends Placeholder implements InventoryHolder {
             if (ticker != null && !ticker.isCancelled()) {
                 ticker.cancel();
             }
-            ticker = Bukkit.getScheduler().runTaskTimer(
+            ticker = Bukkit.getGlobalRegionScheduler().runAtFixedRate(
                     loader.getPlugin(),
-                    this::tick,
+                    task -> tick(),
                     1,
                     1
             );
@@ -300,7 +301,7 @@ public abstract class Menu extends Placeholder implements InventoryHolder {
 
     protected void sync(Runnable runnable, int delay) {
         if (!Bukkit.isPrimaryThread() || delay != 0)
-            Bukkit.getScheduler().runTaskLater(loader.getPlugin(), runnable, delay);
+            Bukkit.getGlobalRegionScheduler().runDelayed(loader.getPlugin(), task -> runnable.run(), delay);
         else runnable.run();
     }
 
